@@ -1,6 +1,6 @@
 package com.hc.admc.base;
 
-import com.hc.admc.execption.ApiException;
+import com.hc.admc.retrofit.execption.ApiException;
 
 import rx.Subscriber;
 
