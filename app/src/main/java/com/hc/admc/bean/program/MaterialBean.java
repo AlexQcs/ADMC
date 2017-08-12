@@ -1,22 +1,24 @@
 package com.hc.admc.bean.program;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 /**
  * Created by alex on 2017/8/9.
  */
-@Root(name = "material", strict = false)
+
 public class MaterialBean {
-    @Attribute(name="width")
+
     public String type;
-    @Element(name = "content")
     public String content;
-    @Element(name = "matName")
     public String matName;
-    @Element(name = "path")
     public String path;
+    public String suffix;
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
 
     public String getType() {
         return type;

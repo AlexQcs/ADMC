@@ -1,21 +1,13 @@
 package com.hc.admc.bean.program;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import java.util.List;
 
 /**
  * Created by alex on 2017/8/9.
  */
-@Root(name = "programItem", strict = false)
 public class ProgramItemBean {
-    @ElementList(required=true, inline=true, entry="matItem")
     public List<MatItemBean> matItems;
-    @Element(name = "program")
     public ProgramBean program;
-    @Element(name = "programTaskRelation")
     public ProgramTaskRelationBean programTaskRelation;
 
     public List<MatItemBean> getMatItems() {
@@ -23,7 +15,7 @@ public class ProgramItemBean {
     }
 
     public void setMatItems(List<MatItemBean> matItems) {
-        matItems = matItems;
+        this.matItems = matItems;
     }
 
     public ProgramBean getProgramBean() {
@@ -39,14 +31,14 @@ public class ProgramItemBean {
     }
 
     public void setProgramTaskRelationBean(ProgramTaskRelationBean programTaskRelationBean) {
-        programTaskRelation = programTaskRelationBean;
+        this.programTaskRelation = programTaskRelationBean;
     }
 
     @Override
 
     public String toString() {
         return "ProgramItemBean{" +
-                "matItem=" + matItems +
+                "matItems=" + matItems +
                 ", program=" + program +
                 ", programTaskRelation=" + programTaskRelation +
                 '}';

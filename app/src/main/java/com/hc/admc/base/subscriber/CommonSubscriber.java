@@ -2,7 +2,6 @@ package com.hc.admc.base.subscriber;
 
 import android.content.Context;
 
-import com.hc.admc.base.BaseSubscriber;
 import com.hc.admc.retrofit.execption.ApiException;
 import com.hc.admc.utils.LogUtils;
 import com.hc.admc.utils.NetworkUtil;

@@ -1,15 +1,26 @@
 package com.hc.admc.utils;
 
+import android.util.Xml;
+
 import com.hc.admc.bean.PostResult;
+import com.hc.admc.bean.program.MatItemBean;
+import com.hc.admc.bean.program.MaterialBean;
+import com.hc.admc.bean.program.ProgramBean;
+import com.hc.admc.bean.program.ProgramItemBean;
+import com.hc.admc.bean.program.ProgramTaskRelationBean;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alex on 2017/8/9.
@@ -142,5 +153,121 @@ public class XmlUtils {
         //将result返回
         return result;
 
+    }
+
+    public static List<ProgramItemBean> parsePrograms(String xmlStr) {
+        InputStream in = new ByteArrayInputStream(xmlStr.getBytes());
+        XmlPullParser parser = Xml.newPullParser();
+        try {
+            parser.setInput(in, "UTF-8");
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        List<ProgramItemBean> resultList = new ArrayList<>();
+        ProgramItemBean programItemBean = null;
+        List<MatItemBean> matItemBeanList = new ArrayList<>();
+        MatItemBean matItemBean = null;
+        MaterialBean materialBean = null;
+        ProgramBean programBean = null;
+        ProgramTaskRelationBean programTaskRelationBean = null;
+        try {
+            int eventType = parser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_DOCUMENT:
+                        break;
+                    case XmlPullParser.START_TAG:
+                        String tagName = parser.getName();
+                        switch (tagName) {
+                            case "programItem":
+                                programItemBean = new ProgramItemBean();
+                                break;
+                            case "matItems":
+                                matItemBeanList = new ArrayList<>();
+                                break;
+                            case "matItem":
+                                matItemBean = new MatItemBean();
+                                matItemBean.setItemId(parser.getAttributeValue(null, "itemId"));
+                                matItemBean.setSortNum(parser.getAttributeValue(null, "sortNum"));
+                                break;
+                            case "material":
+                                materialBean = new MaterialBean();
+                                materialBean.setType(parser.getAttributeValue(null, "type"));
+                                break;
+                            case "content":
+                                materialBean.setContent(parser.nextText());
+                                break;
+                            case "matName":
+                                materialBean.setMatName(parser.nextText());
+                                break;
+                            case "path":
+                                materialBean.setSuffix(parser.nextText());
+                                break;
+                            case "program":
+                                programBean = new ProgramBean();
+                                programBean.setHeight(parser.getAttributeValue(null, "height"));
+                                programBean.setWidth(parser.getAttributeValue(null, "width"));
+                                break;
+                            case "items":
+                                programBean.setItems(parser.nextText());
+                                break;
+                            case "programTaskRelation":
+                                programTaskRelationBean = new ProgramTaskRelationBean();
+                                programTaskRelationBean.setBeginDate(parser.getAttributeValue(null, "beginDate"));
+                                programTaskRelationBean.setBeginTime(parser.getAttributeValue(null, "beginTime"));
+                                programTaskRelationBean.setEndDate(parser.getAttributeValue(null, "endTime"));
+                                programTaskRelationBean.setEndTime(parser.getAttributeValue(null, "endDate"));
+                                programTaskRelationBean.setPlayNum(parser.getAttributeValue(null, "playNum"));
+                                programTaskRelationBean.setWeek(parser.getAttributeValue(null, "week"));
+                                break;
+                        }
+
+                        break;
+                    case XmlPullParser.END_TAG:
+                        switch (parser.getName()){
+                            case "programItem":
+                                if (programItemBean!=null){
+                                    resultList.add(programItemBean);
+                                }
+                                break;
+                            case "matItems":
+                                if (programItemBean!=null){
+                                    programItemBean.setMatItems(matItemBeanList);
+                                }
+                                break;
+                            case "matItem":
+                                if (matItemBean!=null){
+                                    matItemBeanList.add(matItemBean);
+                                }
+                                break;
+                            case "material":
+                                if (materialBean!=null){
+                                    matItemBean.setBean(materialBean);
+                                }
+                                break;
+                            case "program":
+                                if (programBean!=null){
+                                    programItemBean.setProgramBean(programBean);
+                                }
+                                break;
+                            case "programTaskRelation":
+                                if (programTaskRelationBean!=null){
+                                    programItemBean.setProgramTaskRelationBean(programTaskRelationBean);
+                                }
+                                break;
+                        }
+                        break;
+                    case XmlPullParser.END_DOCUMENT:
+
+                        break;
+                }
+                eventType = parser.next();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultList;
     }
 }

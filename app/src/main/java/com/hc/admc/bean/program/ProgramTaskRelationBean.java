@@ -1,24 +1,16 @@
 package com.hc.admc.bean.program;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
 
 /**
  * Created by alex on 2017/8/9.
  */
-@Root(name = "programTaskRelation", strict = false)
 public class ProgramTaskRelationBean {
-    @Attribute(name="beginDate")
     public String beginDate;
-    @Attribute(name="beginTime")
     public String beginTime;
-    @Attribute(name="endDate")
     public String endDate;
-    @Attribute(name="endTime")
     public String endTime;
-    @Attribute(name="playNum")
     public String playNum;
-    @Attribute(name="week")
     public String week;
 
     public String getBeginDate() {
